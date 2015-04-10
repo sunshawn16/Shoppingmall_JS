@@ -1,13 +1,20 @@
 
-var basicList=[{"id":"ITEM000001","price":40},{"id":"ITEM000002","price":10},{"id":"ITEM000003","price":50},{"id":"ITEM000004","price":20},{"id":"ITEM000005","price":60}];
+var basicList=[{"id":"1","price":40},{"id":"2","price":10},{"id":"3","price":50},{"id":"4","price":20},{"id":"5","price":60}];
 
-var secondHalfList=[{"id":"ITEM000001","secondHalf":1},{"id":"ITEM000003","secondHalf":1}];
-var discountList=[{"id":"ITEM000001","percentage":75},{"id":"ITEM000005","percentage":90}];
+var secondHalfList=[{"id":"1","secondHalf":1},{"id":"3","secondHalf":1}];
+var discountList=[{"id":"1","percentage":75},{"id":"5","percentage":90}];
 
 
 function checkOut()
 {
+    var cartList=getCartList();
+    initCartList(cartList);
+    discount(cartList);
+    secondHalfPromotion(cartList);
+    disPlay(cartList);
+}
 
+function getCartList(){
     var cartList = [];
     var inputList = document.getElementsByName("ITEM");//根据名字获取<input>标签对象集合
     var selList = document.getElementsByName("buyNum");//根据名字获取<select>标签集合
@@ -21,38 +28,23 @@ function checkOut()
             });
         }
     }
+    return cartList;
+}
 
+function initCartList(cartList){
     for(var i in cartList){
         var price=getPriceById(cartList[i].id);
-       // var percentage=getPercentageById(cartList[i].id);
-       // var secondHalf=getSecondHalfById(cartList[i].id);
-       // document.writeln("percentage:"+percentage+"  secondHalf: "+secondHalf+"<br/>");
+        // var percentage=getPercentageById(cartList[i].id);
+        // var secondHalf=getSecondHalfById(cartList[i].id);
+        // document.writeln("percentage:"+percentage+"  secondHalf: "+secondHalf+"<br/>");
         cartList[i].price=price;
         //cartList[i].percentage=percentage;
         //cartList[i].secondHalf=secondHalf;
         cartList[i].itemSum=cartList[i].price*cartList[i].num;
         cartList[i].disprice=price;
     }
-    discount(cartList);
-    secondHalfPromotion(cartList);
-    disPlay(cartList);
-
 }
 
-function disPlay(cartList){
-    var origCost = 0;
-    var disCost = 0;
-    document.writeln("CartList: |  ID  |  num |  price |disP| subTotoal "+"<br/>");
-    for(var i in cartList) {
-        origCost=origCost+cartList[i].price*cartList[i].num;
-        document.writeln("CartList:item"+cartList[i].id + "  " + cartList[i].num+ "  "+cartList[i].price +" "+cartList[i].disprice+" "+ cartList[i].itemSum+"   <br/>");
-        disCost =disCost +cartList[i].itemSum;
-    }
-    document.writeln("Total cost | befor promotion| U saved"+"<br/>")
-    var gap= origCost- disCost;
-    document.writeln(disCost+" "+origCost+" "+gap+"<br/>");
-
-}
 function secondHalfPromotion(cartList) {
     for (var i in cartList) {
         var secondHalf=getSecondHalfById(cartList[i].id);
@@ -99,4 +91,19 @@ function getSecondHalfById(id){
         }
     }
     return 0;
+}
+
+function disPlay(cartList){
+    var origCost = 0;
+    var disCost = 0;
+    document.writeln("CartList: |  ID  |  num |  price |disP| subTotoal "+"<br/>");
+    for(var i in cartList) {
+        origCost=origCost+cartList[i].price*cartList[i].num;
+        document.writeln("CartList:item"+cartList[i].id + "  " + cartList[i].num+ "  "+cartList[i].price +" "+cartList[i].disprice+" "+ cartList[i].itemSum+"   <br/>");
+        disCost =disCost +cartList[i].itemSum;
+    }
+    document.writeln("Total cost | befor promotion| U saved"+"<br/>")
+    var gap= origCost- disCost;
+    document.writeln(disCost+" "+origCost+" "+gap+"<br/>");
+
 }
